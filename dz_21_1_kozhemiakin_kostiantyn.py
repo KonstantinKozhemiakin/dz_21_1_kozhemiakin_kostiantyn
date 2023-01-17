@@ -95,7 +95,7 @@ class Matrix:
                     self.__matrix[i].append([])
                 self.__matrix[i][j] = random.randint(rand_start, rand_finish)
         self.add_zero()
-        return self.__matrix
+        return self
 
     def create_copy(self):
         my_list = []
@@ -115,12 +115,7 @@ class Matrix:
         return new_matrix
 
     def __sum_to_matrix_list(self, to_add: list):
-        new_matrix = Matrix()
-        new_matrix.create_random_matrix(self.__len_row, self.__len_col)
-        for i in range(self.__len_row):
-            for j in range(self.__len_col):
-                new_matrix.__matrix[i][j] = self.__matrix[i][j] + to_add[i][j]
-        return new_matrix
+        return self.__sum_to_matrix_matrix(Matrix(to_add))
 
     def __sum_to_matrix_matrix(self, to_add):
         self_copy = self.create_copy()
@@ -131,80 +126,77 @@ class Matrix:
                 self_copy.__matrix[i][j] = self_copy.__matrix[i][j] + to_add_copy.__matrix[i][j]
         return self_copy
 
-    def __sub_to_matrix_num(self, to_add):
+    def __sub_to_matrix_num(self, to_sub):
         new_matrix = Matrix()
         new_matrix.create_random_matrix(self.__len_row, self.__len_col)
         for i in range(self.__len_row):
             for j in range(self.__len_col):
-                new_matrix.__matrix[i][j] = self.__matrix[i][j] - to_add
+                new_matrix.__matrix[i][j] = self.__matrix[i][j] - to_sub
         return new_matrix
 
-    def __sub_to_matrix_list(self, to_add: list):
-        new_matrix = Matrix()
-        new_matrix.create_random_matrix(self.__len_row, self.__len_col)
-        for i in range(self.__len_row):
-            for j in range(self.__len_col):
-                new_matrix.__matrix[i][j] = self.__matrix[i][j] - to_add[i][j]
-        return new_matrix
+    def __sub_to_matrix_list(self, to_sub: list):
+        return self.__sub_to_matrix_matrix(Matrix(to_sub))
 
-    def __sub_to_matrix_matrix(self, to_add):
+    def __sub_to_matrix_matrix(self, to_sub):
         self_copy = self.create_copy()
-        to_add_copy = to_add.create_copy()
+        to_add_copy = to_sub.create_copy()
         self_copy.__change_size_of_matrix(to_add_copy)
         for i in range(self_copy.__len_row):
             for j in range(self_copy.__len_col):
                 self_copy.__matrix[i][j] = self_copy.__matrix[i][j] - to_add_copy.__matrix[i][j]
         return self_copy
 
-    def __mul_matrix_num(self, to_mult: int):
+    def __mul_to_matrix_num(self, to_mul: int):
         new_matrix = Matrix()
         new_matrix.create_random_matrix(self.__len_row, self.__len_col)
         for i in range(self.__len_row):
             for j in range(self.__len_col):
-                new_matrix.__matrix[i][j] = self.__matrix[i][j] * to_mult
-        return self.__matrix
-
-    def __mul_to_matrix_list(self, to_add: list):
-        new_matrix = Matrix()
-        new_matrix.create_random_matrix(self.__len_row, self.__len_col)
-        for i in range(self.__len_row):
-            for j in range(self.__len_col):
-                new_matrix.__matrix[i][j] = self.__matrix[i][j] * to_add[i][j]
+                new_matrix.__matrix[i][j] = self.__matrix[i][j] * to_mul
         return new_matrix
 
-    def __mul_to_matrix_matrix(self, to_add):
-        self_copy = self.create_copy()
-        to_add_copy = to_add.create_copy()
-        self_copy.__change_size_of_matrix(to_add_copy)
-        for i in range(self_copy.__len_row):
-            for j in range(self_copy.__len_col):
-                self_copy.__matrix[i][j] = self_copy.__matrix[i][j] * to_add_copy.__matrix[i][j]
-        return self_copy
+    def __mul_to_matrix_list(self, to_mul: list):
+        return self.__mul_to_matrix_matrix(Matrix(to_mul))
+
+    def __mul_to_matrix_matrix(self, to_mul):
+        if self.__len_col == to_mul.__len_row:
+            new_matrix = Matrix()
+            new_matrix = new_matrix.create_random_matrix(self.__len_row, to_mul.__len_col)
+            for i in range(self.__len_row):
+                for j in range(to_mul.__len_col):
+                    for k in range(to_mul.__len_row):
+                        new_matrix.__matrix[i][j] += self.__matrix[i][k] * to_mul.__matrix[k][j]
+            return new_matrix
+        else:
+            raise "The number of columns of the first matrix is not equal to the number of rows of the second matrix"
 
 
 X = [[12, 7, 3],
      [4, 5, 6],
-     [7, 4, 5],
-     [7, 7, 7]]
-Y = [[5, 8, 1, 2],
-     [6, 7, 3, 2],
-     [4, 5, 9, 2]]
+     [7, 8, 9],
+     [3, 4, 1]]
 
-matr = Matrix(X)
-# matr.print_matrix()
-matr2 = Matrix(Y)
+Y = [[5, 8, 1, 2, 2],
+     [6, 7, 3, 2, 2],
+     [4, 5, 9, 2, 2]]
 
-# matr.print_matrix()
-# matr = Matrix()
-# matr.create_random_matrix(2, 10)
-# matr.print_matrix()
+Z = [[2, 2],
+     [4, 3]]
 
-# matr.print_matrix()
-# print()
-matr3 = matr - matr2
-matr.print_matrix()
+matrix = Matrix(X)
+matrix_2 = Matrix(Y)
+
+matrix_sum_1 = matrix + Y
+matrix_sum_2 = matrix + matrix_2
+matrix_sum_1.print_matrix()
 print()
-matr2.print_matrix()
+matrix_sum_2.print_matrix()
 print()
-matr3.print_matrix()
-
+matrix_subtract_1 = matrix - Z
+matrix_subtract_2 = matrix - matrix_2
+matrix_subtract_1.print_matrix()
+print()
+matrix_subtract_2.print_matrix()
+print()
+matrix_multiply_1 = matrix * Y
+matrix_multiply_2 = matrix * matrix_2
+matrix_multiply_1.print_matrix()
