@@ -169,6 +169,14 @@ class Matrix:
         else:
             raise "The number of columns of the first matrix is not equal to the number of rows of the second matrix"
 
+    def trans_matrix_matrix(self):
+        self_copy = self.create_copy()
+        trans_matrix = Matrix().create_random_matrix(self.__len_col, self.__len_row)
+        for i in range(self_copy.__len_row):
+            for j in range(self_copy.__len_col):
+                trans_matrix.__matrix[j][i] = self_copy.__matrix[i][j]
+        return trans_matrix
+
 
 X = [[12, 7, 3],
      [4, 5, 6],
@@ -200,3 +208,7 @@ print()
 matrix_multiply_1 = matrix * Y
 matrix_multiply_2 = matrix * matrix_2
 matrix_multiply_1.print_matrix()
+print()
+matrix_transpose = matrix.trans_matrix_matrix()
+matrix_transpose.print_matrix()
+matrix.print_matrix()
